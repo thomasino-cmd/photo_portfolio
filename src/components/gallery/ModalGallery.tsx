@@ -83,8 +83,15 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed top-[var(--frame-padding)] right-[var(--frame-padding)] bottom-[var(--frame-padding)] left-[var(--frame-padding)] z-[100] flex text-black border-[2px] border-black overflow-hidden"
-                style={{ backgroundColor: activeProject.bgColor, transition: 'background-color 0.5s ease' }}
+                className="fixed z-[100] flex text-black border-[2px] border-black overflow-hidden"
+                style={{
+                    backgroundColor: activeProject.bgColor,
+                    transition: 'background-color 0.5s ease',
+                    top: 'var(--frame-padding)',
+                    right: 'var(--frame-padding)',
+                    bottom: 'var(--frame-padding)',
+                    left: 'var(--frame-padding)'
+                }}
             >
                 {/* Close Button Mobile/Responsive */}
                 <button
