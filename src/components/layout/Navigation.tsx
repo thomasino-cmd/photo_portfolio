@@ -21,11 +21,11 @@ export default function Navigation() {
     const pathname = usePathname();
 
     return (
-        <nav className="absolute top-0 left-0 w-full z-50 text-black px-6 py-4 md:px-12 md:py-6 flex justify-between items-start md:items-center flex-col md:flex-row pointer-events-none gap-y-4">
-            <Link href="/" className="font-serif font-black text-2xl md:text-3xl uppercase tracking-tighter pointer-events-auto whitespace-nowrap mr-6 shrink-0 leading-[0.8]" style={{ transform: 'scaleY(1.3)', transformOrigin: 'left center' }}>
+        <nav className="absolute top-0 left-0 w-full z-50 text-black px-6 py-4 md:px-12 md:py-6 flex justify-between items-center flex-col md:flex-row pointer-events-none gap-y-6">
+            <Link href="/" className="font-serif font-black text-2xl md:text-3xl uppercase tracking-tighter pointer-events-auto whitespace-nowrap mr-6 shrink-0 leading-[0.8] text-center" style={{ transform: 'scaleY(1.3)', transformOrigin: 'center center' }}>
                 Thomas <br /> Sterlini
             </Link>
-            <ul className="flex flex-wrap gap-x-4 md:gap-x-6 gap-y-2 text-xs md:text-sm font-bold font-serif uppercase tracking-tighter pointer-events-auto" style={{ transform: 'scaleY(1.3)', transformOrigin: 'top center' }}>
+            <ul className="flex flex-wrap justify-center md:justify-end gap-x-3.5 md:gap-x-6 gap-y-3 text-sm md:text-[17px] font-bold font-serif uppercase tracking-tighter pointer-events-auto" style={{ transform: 'scaleY(1.3)', transformOrigin: 'top center' }}>
                 {categories.map((cat) => {
                     const isActive = pathname === cat.path;
                     return (
