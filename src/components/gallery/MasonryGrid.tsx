@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { CMSProject } from '@/lib/cmsData';
@@ -17,20 +17,20 @@ export interface Photo {
     category?: string;
 }
 
-export default function MasonryGrid({ photos, enableLinks, cmsProjects }: { photos: Photo[], enableLinks?: boolean, cmsProjects?: CMSProject[] }) {
-    const [hoveredId, setHoveredId] = useState<string | null>(null);
-    const [selectedId, setSelectedId] = useState<string | null>(null);
-    const [selectedCmsIndex, setSelectedCmsIndex] = useState<number | null>(null);
+export default function MasonryGrid({ photos, enableLinks }: { photos: Photo[], enableLinks?: boolean }) {
+    const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
 
-    // If we have cmsProjects, we can display them first in the grid.
-    // For this implementation, let's prepend them to the items array.
-    const hasCms = cmsProjects && cmsProjects.length > 0;
-    const totalItemsCount = photos.length + (hasCms ? cmsProjects.length : 0);
+    const colors = ['#FFD700', '#FF69B4', '#00FFFF', '#FF7F50', '#32CD32', '#9370DB', '#FF4500', '#00FF7F'];
 
-    const allItems = [
-        ...(cmsProjects || []).map((cms, index) => ({ type: 'cms' as const, data: cms, cmsIndex: index })),
-        ...photos.map(p => ({ type: 'photo' as const, data: p }))
-    ];
+    // Map basic photos to the CMSProject format expected by ModalGallery
+    const modalProjects: CMSProject[] = photos.map((p, index) => ({
+        id: p.id,
+        mediaUrl: p.url,
+        mediaType: 'image',
+        bgColor: colors[index % colors.length],
+        title: p.category ? p.category.replace(/-/g, ' ') : 'Portfolio',
+        description: '' // AI Vision placeholder
+    }));
 
     return (
         <>
@@ -39,56 +39,15 @@ export default function MasonryGrid({ photos, enableLinks, cmsProjects }: { phot
                     <div key={colIndex} className={clsx("flex flex-col gap-24 lg:gap-40 w-full md:w-1/3",
                         colIndex === 0 ? "md:mt-0" : colIndex === 1 ? "md:mt-32" : "md:mt-16"
                     )}>
-                        {allItems.filter((_, i) => i % 3 === colIndex).map((item, colItemIndex) => {
+                        {photos.map((photo, index) => {
+                            // Only render items meant for this column
+                            if (index % 3 !== colIndex) return null;
 
-                            if (item.type === 'cms') {
-                                const cms = item.data as CMSProject;
-                                return (
-                                    <div key={cms.id} className="relative break-inside-avoid px-8 md:px-0">
-                                        <div
-                                            className="absolute inset-0 border border-black z-0 pointer-events-none"
-                                            style={{
-                                                backgroundColor: cms.bgColor,
-                                                transform: 'translate(16px, 16px)'
-                                            }}
-                                        />
-                                        <motion.div
-                                            layoutId={`cms-container-${cms.id}`}
-                                            className="relative overflow-hidden z-10 border border-black bg-white cursor-pointer"
-                                            onClick={() => setSelectedCmsIndex(item.cmsIndex)}
-                                            whileHover={{ scale: 1.05 }}
-                                            transition={{ type: "tween", duration: 0.2 }}
-                                        >
-                                            {cms.mediaType === 'image' ? (
-                                                <Image
-                                                    src={cms.mediaUrl}
-                                                    alt={cms.title}
-                                                    width={1200}
-                                                    height={800}
-                                                    className="w-full h-auto object-cover aspect-[4/3]"
-                                                    unoptimized={cms.mediaUrl.startsWith('http')}
-                                                />
-                                            ) : (
-                                                <video
-                                                    src={cms.mediaUrl}
-                                                    className="w-full h-auto object-cover aspect-[4/3] pointer-events-none"
-                                                    muted
-                                                    loop
-                                                    autoPlay
-                                                    playsInline
-                                                />
-                                            )}
-                                        </motion.div>
-                                    </div>
-                                );
-                            }
-
-                            const photo = item.data as Photo;
-                            const colors = ['#FFD700', '#FF69B4', '#00FFFF', '#FF7F50', '#32CD32', '#9370DB', '#FF4500', '#00FF7F'];
-                            const frameColor = colors[colItemIndex % colors.length];
+                            const frameColor = colors[index % colors.length];
 
                             return (
                                 <div key={photo.id} className="relative break-inside-avoid px-8 md:px-0">
+                                    {/* Flat Pop Color Frame */}
                                     <div
                                         className="absolute inset-0 border border-black z-0 pointer-events-none"
                                         style={{
@@ -97,6 +56,7 @@ export default function MasonryGrid({ photos, enableLinks, cmsProjects }: { phot
                                         }}
                                     />
 
+                                    {/* The Main Image Container */}
                                     {enableLinks && photo.category ? (
                                         <Link href={`/${photo.category.toLowerCase().replace(/ /g, '-')}`} className="block relative z-10 outline-none">
                                             <motion.div
@@ -114,6 +74,7 @@ export default function MasonryGrid({ photos, enableLinks, cmsProjects }: { phot
                                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
                                                     placeholder="blur"
                                                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                                                    priority={index < 4}
                                                     unoptimized={photo.url.startsWith('http')}
                                                 />
                                             </motion.div>
@@ -122,7 +83,7 @@ export default function MasonryGrid({ photos, enableLinks, cmsProjects }: { phot
                                         <motion.div
                                             layoutId={`img-container-${photo.id}`}
                                             className="relative overflow-hidden z-10 border border-black bg-white cursor-pointer"
-                                            onClick={() => setSelectedId(photo.id)}
+                                            onClick={() => setSelectedPhotoIndex(index)}
                                             whileHover={{ scale: 1.05 }}
                                             transition={{ type: "tween", duration: 0.2 }}
                                         >
@@ -135,6 +96,7 @@ export default function MasonryGrid({ photos, enableLinks, cmsProjects }: { phot
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
                                                 placeholder="blur"
                                                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                                                priority={index < 4}
                                                 unoptimized={photo.url.startsWith('http')}
                                             />
                                         </motion.div>
@@ -146,41 +108,11 @@ export default function MasonryGrid({ photos, enableLinks, cmsProjects }: { phot
                 ))}
             </div>
 
-            <AnimatePresence>
-                {selectedId && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[60] bg-black/95 flex items-center justify-center cursor-none"
-                        onClick={() => setSelectedId(null)}
-                    >
-                        {photos.filter(p => p.id === selectedId).map(photo => (
-                            <motion.div
-                                layoutId={`img-container-${photo.id}`}
-                                key="fullscreen-img"
-                                className="relative w-full h-full max-w-[95vw] max-h-[95vh] m-auto"
-                            >
-                                <Image
-                                    src={photo.url}
-                                    alt={photo.alt}
-                                    fill
-                                    className="object-contain"
-                                    quality={100}
-                                    unoptimized={photo.url.startsWith('http')}
-                                />
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* New Modal Gallery for CMS Projects */}
-            {selectedCmsIndex !== null && cmsProjects && (
+            {selectedPhotoIndex !== null && (
                 <ModalGallery
-                    projects={cmsProjects}
-                    initialIndex={selectedCmsIndex}
-                    onClose={() => setSelectedCmsIndex(null)}
+                    projects={modalProjects}
+                    initialIndex={selectedPhotoIndex}
+                    onClose={() => setSelectedPhotoIndex(null)}
                 />
             )}
         </>
