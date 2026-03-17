@@ -83,7 +83,7 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] flex text-black"
+                className="fixed top-[var(--frame-padding)] right-[var(--frame-padding)] bottom-[var(--frame-padding)] left-[var(--frame-padding)] z-[100] flex text-black border-[2px] border-black overflow-hidden"
                 style={{ backgroundColor: activeProject.bgColor, transition: 'background-color 0.5s ease' }}
             >
                 {/* Close Button Mobile/Responsive */}
@@ -101,13 +101,13 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
                     {/* Left Column: Media Area */}
                     <div className="flex-1 w-full relative flex items-center justify-center p-4 md:p-12 lg:p-24 h-[60vh] md:h-full">
                         {/* Title overlay in top left */}
-                        <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10">
-                            <h2 className="font-serif font-black text-3xl md:text-5xl tracking-tighter uppercase" style={{ transform: 'scaleY(1.3)', transformOrigin: 'top left' }}>
+                        <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10 pointer-events-none">
+                            <h2 className="font-serif font-black text-3xl md:text-5xl tracking-tighter uppercase mix-blend-difference text-white" style={{ transform: 'scaleY(1.3)', transformOrigin: 'top left' }}>
                                 {activeProject.title}
                             </h2>
                         </div>
 
-                        {/* Media Container with thin black border */}
+                        {/* Media Container without fixed white box */}
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={activeProject.id}
@@ -115,20 +115,16 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
                                 transition={{ duration: 0.3 }}
-                                className="relative w-full h-full max-h-full border border-black bg-white overflow-hidden flex items-center justify-center group"
+                                className="relative flex items-center justify-center w-full h-full"
                             >
                                 {activeProject.mediaType === 'image' ? (
-                                    <div className="relative w-[90%] h-[90%] m-auto">
-                                        <Image
-                                            src={activeProject.mediaUrl}
-                                            alt={activeProject.title}
-                                            fill
-                                            className="object-contain"
-                                            unoptimized={activeProject.mediaUrl.startsWith('http')}
-                                        />
-                                    </div>
+                                    <img
+                                        src={activeProject.mediaUrl}
+                                        alt={activeProject.title}
+                                        className="max-w-full max-h-full object-contain border border-black bg-white"
+                                    />
                                 ) : (
-                                    <div className="relative w-full h-full flex flex-col bg-black">
+                                    <div className="relative w-full h-full flex flex-col bg-black border border-black">
                                         <video
                                             ref={videoRef}
                                             src={activeProject.mediaUrl}
