@@ -1,5 +1,6 @@
 import MasonryGrid from '@/components/gallery/MasonryGrid';
 import { getAllPhotos } from '@/lib/gallery';
+import { cmsProjects } from '@/lib/cmsData';
 
 export default async function HomePage() { // Make async if doing any await or just read sync. Next.js App Router root pages can be async.
   // Although getAllPhotos reads sync from filesystem, we can keep it as is.
@@ -16,6 +17,7 @@ export default async function HomePage() { // Make async if doing any await or j
       <MasonryGrid
         photos={homePhotos}
         enableLinks={true}
+        cmsProjects={cmsProjects}
       />
     </div>
   );
