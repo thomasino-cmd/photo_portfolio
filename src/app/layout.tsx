@@ -1,4 +1,4 @@
-import { Bodoni_Moda, Inter } from 'next/font/google';
+import { Bodoni_Moda, Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import Navigation from '@/components/layout/Navigation';
 import CustomCursor from '@/components/layout/CustomCursor';
@@ -14,6 +14,11 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space',
+});
+
 export const metadata = {
   title: 'Photography Portfolio',
   description: 'Minimalist photography portfolio',
@@ -21,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`antialiased ${bodoni.variable} ${inter.variable}`}>
+    <html lang="en" className={`antialiased ${bodoni.variable} ${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="min-h-screen cursor-none font-inter relative">
         <CustomCursor />
         {/* The White Frame */}

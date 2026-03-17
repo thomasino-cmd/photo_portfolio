@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { Play, Pause, Maximize, X, ArrowLeft, ArrowRight } from 'lucide-react';
 import { CMSProject } from '@/lib/cmsData';
 
@@ -78,20 +77,18 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
     };
 
     return (
-        <AnimatePresence>
+        <div
+            className="fixed inset-0 z-[200] flex"
+            style={{ padding: 'var(--frame-padding)', backgroundColor: '#DFDFDF' }}
+            onClick={onClose}
+        >
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed z-[100] flex text-black border-[2px] border-black overflow-hidden"
-                style={{
-                    backgroundColor: activeProject.bgColor,
-                    transition: 'background-color 0.5s ease',
-                    top: 'var(--frame-padding)',
-                    right: 'var(--frame-padding)',
-                    bottom: 'var(--frame-padding)',
-                    left: 'var(--frame-padding)'
-                }}
+                className="w-full h-full text-black border-[2px] border-black overflow-hidden relative flex"
+                style={{ backgroundColor: activeProject.bgColor, transition: 'background-color 0.5s ease' }}
+                onClick={(e) => e.stopPropagation()}
             >
                 {/* Close Button Mobile/Responsive */}
                 <button
@@ -179,14 +176,12 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
 
                         {/* Description */}
                         <div className="flex-1 px-8 md:px-12 py-8 md:py-0 overflow-y-auto w-full md:mt-24">
-                            <p className="text-lg md:text-xl font-medium leading-relaxed font-sans">
-                                {activeProject.description || "Description pending AI generation..."}
+                            <p
+                                className="text-lg md:text-xl font-medium leading-relaxed font-space tracking-tight"
+                                style={{ fontFamily: 'var(--font-space), sans-serif' }}
+                            >
+                                {activeProject.description}
                             </p>
-                            {!activeProject.description && (
-                                <p className="text-sm border border-black p-2 mt-4 inline-block opacity-70">
-                                    [AI Vision Note: Content ready for auto-generation]
-                                </p>
-                            )}
                         </div>
 
                         {/* Navigation Footer */}
@@ -207,6 +202,6 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
                     </div>
                 </div>
             </motion.div>
-        </AnimatePresence>
+        </div>
     );
 }

@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { CMSProject } from '@/lib/cmsData';
 import ModalGallery from './ModalGallery';
+import { getPhotoMetadata } from '@/lib/photo_metadata';
 
 export interface Photo {
     id: string;
@@ -23,14 +24,17 @@ export default function MasonryGrid({ photos, enableLinks }: { photos: Photo[], 
     const colors = ['#FFD700', '#FF69B4', '#00FFFF', '#FF7F50', '#32CD32', '#9370DB', '#FF4500', '#00FF7F'];
 
     // Map basic photos to the CMSProject format expected by ModalGallery
-    const modalProjects: CMSProject[] = photos.map((p, index) => ({
-        id: p.id,
-        mediaUrl: p.url,
-        mediaType: 'image',
-        bgColor: colors[index % colors.length],
-        title: p.category ? p.category.replace(/-/g, ' ') : 'Portfolio',
-        description: '' // AI Vision placeholder
-    }));
+    const modalProjects: CMSProject[] = photos.map((p, index) => {
+        const metadata = getPhotoMetadata(p.url);
+        return {
+            id: p.id,
+            mediaUrl: p.url,
+            mediaType: 'image',
+            bgColor: colors[index % colors.length],
+            title: p.category ? p.category.replace(/-/g, ' ') : 'Portfolio',
+            description: metadata.description
+        };
+    });
 
     return (
         <>
@@ -108,13 +112,15 @@ export default function MasonryGrid({ photos, enableLinks }: { photos: Photo[], 
                 ))}
             </div>
 
-            {selectedPhotoIndex !== null && (
-                <ModalGallery
-                    projects={modalProjects}
-                    initialIndex={selectedPhotoIndex}
-                    onClose={() => setSelectedPhotoIndex(null)}
-                />
-            )}
+            <AnimatePresence>
+                {selectedPhotoIndex !== null && (
+                    <ModalGallery
+                        projects={modalProjects}
+                        initialIndex={selectedPhotoIndex}
+                        onClose={() => setSelectedPhotoIndex(null)}
+                    />
+                )}
+            </AnimatePresence>
         </>
     );
 }

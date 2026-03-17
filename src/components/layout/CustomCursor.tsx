@@ -20,7 +20,7 @@ export default function CustomCursor() {
 
     return (
         <motion.div
-            className="fixed top-0 left-0 w-4 h-4 rounded-full mix-blend-difference bg-white pointer-events-none z-[100] hidden md:flex items-center justify-center"
+            className="fixed top-0 left-0 w-4 h-4 rounded-full mix-blend-difference bg-white pointer-events-none z-[300] hidden md:flex items-center justify-center"
             animate={{
                 x: position.x - 8,
                 y: position.y - 8,
