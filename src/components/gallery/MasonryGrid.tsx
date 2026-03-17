@@ -32,7 +32,8 @@ export default function MasonryGrid({ photos, enableLinks }: { photos: Photo[], 
             mediaType: 'image',
             bgColor: colors[index % colors.length],
             title: p.category ? p.category.replace(/-/g, ' ') : 'Portfolio',
-            description: metadata.description
+            description: metadata.description,
+            aspectRatio: p.width / p.height
         };
     });
 

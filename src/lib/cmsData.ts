@@ -5,6 +5,7 @@ export interface CMSProject {
     bgColor: string;
     title: string;
     description?: string;
+    aspectRatio?: number;
 }
 
 export const cmsProjects: CMSProject[] = [

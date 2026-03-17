@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, Maximize, X, ArrowLeft, ArrowRight } from 'lucide-react';
+import clsx from 'clsx';
 import { CMSProject } from '@/lib/cmsData';
 
 interface ModalGalleryProps {
@@ -19,6 +20,7 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const activeProject = projects[currentIndex];
+    const isVertical = activeProject.aspectRatio && activeProject.aspectRatio < 1;
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -103,9 +105,12 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
                 <div className="w-full h-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x border-black" style={{ borderRightWidth: '1px' }}>
 
                     {/* Left Column: Media Area */}
-                    <div className="flex-1 w-full relative flex items-center justify-center p-4 md:p-6 lg:p-8 h-[60vh] md:h-full">
+                    <div className={clsx(
+                        "flex-1 w-full relative flex items-center justify-center h-[60vh] md:h-full transition-all duration-500",
+                        isVertical ? "p-8 md:p-12 lg:p-16 pt-24 md:pt-32" : "p-4 md:p-12 lg:p-24"
+                    )}>
                         {/* Title overlay in top left */}
-                        <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10 pointer-events-none">
+                        <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10 pointer-events-none max-w-[80%]">
                             <h2 className="font-serif font-black text-3xl md:text-5xl tracking-tighter uppercase mix-blend-difference text-white" style={{ transform: 'scaleY(1.3)', transformOrigin: 'top left' }}>
                                 {activeProject.title}
                             </h2>
