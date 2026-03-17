@@ -4,7 +4,7 @@ export interface CMSProject {
     mediaType: 'image' | 'video';
     bgColor: string;
     title: string;
-    description: string;
+    description?: string;
 }
 
 export const cmsProjects: CMSProject[] = [
