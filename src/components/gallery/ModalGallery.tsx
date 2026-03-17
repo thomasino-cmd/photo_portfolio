@@ -103,7 +103,7 @@ export default function ModalGallery({ projects, initialIndex, onClose }: ModalG
                 <div className="w-full h-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x border-black" style={{ borderRightWidth: '1px' }}>
 
                     {/* Left Column: Media Area */}
-                    <div className="flex-1 w-full relative flex items-center justify-center p-4 md:p-12 lg:p-24 h-[60vh] md:h-full">
+                    <div className="flex-1 w-full relative flex items-center justify-center p-4 md:p-6 lg:p-8 h-[60vh] md:h-full">
                         {/* Title overlay in top left */}
                         <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10 pointer-events-none">
                             <h2 className="font-serif font-black text-3xl md:text-5xl tracking-tighter uppercase mix-blend-difference text-white" style={{ transform: 'scaleY(1.3)', transformOrigin: 'top left' }}>

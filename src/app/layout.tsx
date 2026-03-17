@@ -20,8 +20,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata = {
-  title: 'Photography Portfolio',
-  description: 'Minimalist photography portfolio',
+  title: 'Thomas Sterlini | Photography Portfolio',
+  description: 'Minimalist photography portfolio by Thomas Sterlini',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

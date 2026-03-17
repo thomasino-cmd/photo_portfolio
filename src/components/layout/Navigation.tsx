@@ -21,15 +21,15 @@ export default function Navigation() {
     const pathname = usePathname();
 
     return (
-        <nav className="absolute top-0 left-0 w-full z-50 text-black p-6 md:px-12 md:py-8 flex justify-between items-start md:items-center flex-col md:flex-row pointer-events-none">
-            <Link href="/" className="font-serif font-black text-4xl md:text-5xl uppercase tracking-tighter pointer-events-auto mb-4 md:mb-0" style={{ transform: 'scaleY(1.3)' }}>
-                Portfolio
+        <nav className="absolute top-0 left-0 w-full z-50 text-black px-6 py-4 md:px-12 md:py-6 flex justify-between items-start md:items-baseline flex-col md:flex-row pointer-events-none gap-y-2">
+            <Link href="/" className="font-serif font-black text-3xl md:text-4xl uppercase tracking-tighter pointer-events-auto whitespace-nowrap mr-6 shrink-0" style={{ transform: 'scaleY(1.3)', transformOrigin: 'left center' }}>
+                Thomas Sterlini
             </Link>
-            <ul className="flex flex-wrap gap-4 md:gap-8 text-sm md:text-md font-bold font-serif uppercase tracking-tighter" style={{ transform: 'scaleY(1.3)', transformOrigin: 'top center' }}>
+            <ul className="flex flex-wrap gap-x-3 md:gap-x-4 gap-y-1 text-[11px] md:text-[13px] font-bold font-serif uppercase tracking-tighter pointer-events-auto" style={{ transform: 'scaleY(1.3)', transformOrigin: 'top center' }}>
                 {categories.map((cat) => {
                     const isActive = pathname === cat.path;
                     return (
-                        <li key={cat.path} className="pointer-events-auto relative">
+                        <li key={cat.path} className="relative">
                             <Link href={cat.path} className="hover:opacity-70 transition-opacity">
                                 {cat.name}
                             </Link>
